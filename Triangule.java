@@ -20,32 +20,23 @@ public abstract class Triangule {
 
   public abstract void checkIfHasReached();
   
-  protected boolean hasReachedMaxHeight() {
-    return trianguleHeight <= height;
-  }
+  protected boolean hasReachedMaxHeight() { return trianguleHeight >= height; }
 
-  protected boolean hasReachedMaxWidth() {
-    return trianguleWidth <= width;
-  }
+  protected boolean hasReachedMaxWidth() { return trianguleWidth >= width; }
 
-  protected boolean hasReachedMinHeight() {
-    return trianguleHeight >= 0;
-  }
+  protected boolean hasReachedMinHeight() { return trianguleHeight <= 0; }
 
-  protected boolean hasReachedMinWidth() {
-    return trianguleWidth >= 0;
-  }
+  protected boolean hasReachedMinWidth() { return trianguleWidth <= 0; }
 
-  public int distanceEdgeToCentre() {
-    getCentre();
-    return 1;
-  }
+  /**
+  * TODO
+  **/
+  public int distanceEdgeToCentre() { return 1; }
   
-  protected int getCentre() {
-    int xSide = width/2;
-    int ySide = height/2;
-    return 1;
-  }
+  /**
+  * TODO
+  **/
+  protected int getCentre() { return 1; }
 
   // ACESSORS
   public int getSpeed() {

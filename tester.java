@@ -1,9 +1,9 @@
-Triangule t;
+Patroller t;
 
 void setup() {
   size(1000, 500);
   background(255);
-  t = new Triangule(10, 10, 200, 15);
+  t = new Patroller(10, 10, 200, 15);
 }
 
 void draw() {
