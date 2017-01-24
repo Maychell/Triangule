@@ -1,14 +1,17 @@
-Patroller t;
+private final int ALICE_COLOUR = 200;
+private final int ALICE_SPEED  = 15;
+
+private Patroller alice;
 
 void setup() {
   size(1000, 500);
   background(255);
-  t = new Patroller(10, 10, 200, 15);
+  alice = new Patroller(10, 10, ALICE_COLOUR, ALICE_SPEED);
 }
 
 void draw() {
   background(255);
-  t.checkIfHasReached();
-  t.move();
-  t.display();
+  alice.checkIfHasReached();
+  alice.move();
+  alice.display();
 }
