@@ -1,8 +1,16 @@
 public abstract class Triangule {
+  protected final int FORWARDS   = 1;
+  protected final int BACKWARDS  = 2;
+  protected final int VERTICAL   = 1;
+  protected final int HORIZONTAL = 2;
+
   private int trianguleWidth;
   private int trianguleHeight;
   private int colour;
   private int speed;
+
+  private int horientation;
+  private int direction;
 
   // private int xPos1 = 10;
   // private int yPos1 = 20;
@@ -43,6 +51,24 @@ public abstract class Triangule {
 
   protected boolean hasReachedMinWidth() { return trianguleWidth <= 0; }
 
+  protected boolean isVertical() { return horientation == VERTICAL; }
+
+  protected boolean isForwards() { return direction == FORWARDS; }
+
+  protected void moveForwards() {
+    if(isVertical())
+      trianguleHeight += speed;
+    else
+      trianguleWidth += speed;
+  }
+
+  protected void moveBackwards() {
+    if(isVertical())
+      trianguleHeight -= speed;
+    else
+      trianguleWidth -= speed;
+  }
+
   // TODO
   public int distanceEdgeToCentre() { return 1; }
   protected int getCentre() { return 1; }
@@ -50,23 +76,21 @@ public abstract class Triangule {
   protected void turnLeft() {}
 
   // ACESSORS
-  public int getSpeed() {
-    return speed;
-  }
+  public int getHorientation() { return horientation; }
 
-  public int getTrianguleHeight() {
-    return trianguleHeight;
-  }
+  public void setHorientation(int horientation) { this.horientation = horientation; }
 
-  public void setTrianguleHeight(int trianguleHeight) {
-    this.trianguleHeight = trianguleHeight;
-  }
+  public int getDirection() { return direction; }
 
-  public void setTrianguleWidth(int trianguleWidth) {
-    this.trianguleWidth = trianguleWidth;
-  }
+  public void setDirection(int direction) { this.direction = direction; }
 
-  public int getTrianguleWidth() {
-    return trianguleWidth;
-  }
+  public int getSpeed() { return speed; }
+
+  public int getTrianguleHeight() { return trianguleHeight; }
+
+  public void setTrianguleHeight(int trianguleHeight) { this.trianguleHeight = trianguleHeight; }
+
+  public void setTrianguleWidth(int trianguleWidth) { this.trianguleWidth = trianguleWidth; }
+
+  public int getTrianguleWidth() { return trianguleWidth; }
 }

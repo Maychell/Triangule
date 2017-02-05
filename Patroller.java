@@ -1,27 +1,20 @@
 class Patroller extends Triangule {
-  private boolean isVertical;
-  private boolean isForwards;
+  private final int CIRCLE_COLOUR = 0;
   private HashMap<Circle, Integer> circles;
   
   public Patroller(int width, int height, int colour, int speed) {
     super(width, height, colour, speed);
-    isVertical = getShorterCordinate();
-    isForwards = getShorterOrientation();
+
     circles = new HashMap<Circle, Integer>();
-  }
 
-  private boolean getShorterOrientation() {
-    return (width - getTrianguleWidth()) < getTrianguleWidth();
-  }
-
-  private boolean getShorterCordinate() {
-    return (height - getTrianguleHeight()) < getTrianguleHeight();
+    setShorterHorientation();
+    setShorterDirection();
   }
 
   public void move() {
     checkIfHasReached();
     
-    if(isForwards)
+    if(isForwards())
       moveForwards();
     else
       moveBackwards();
@@ -29,12 +22,38 @@ class Patroller extends Triangule {
     drawCircle();
   }
 
+  public void checkIfHasReached() {
+    if(isVertical())
+      checkVerticalReached();
+    else
+      checkHorizontalReached();
+  }
+
+  private void checkVerticalReached() {
+    if((isForwards() && hasReachedMaxHeight()) || (!isForwards() && hasReachedMinHeight())) {
+      setHorientation(HORIZONTAL);
+      addCircle();
+    }
+  }
+
+  private void checkHorizontalReached() {
+    if(isForwards() && hasReachedMaxWidth()) {
+      setDirection(BACKWARDS);
+      setHorientation(VERTICAL);
+      addCircle();
+    } else if(!isForwards() && hasReachedMinWidth()) {
+      setDirection(FORWARDS);
+      setHorientation(VERTICAL);
+      addCircle();
+    }
+  }
+
   private void drawCircle() {
-    if(!circles.isEmpty()) {
-      for(Circle circle : circles.keySet()) {
-        fill(0); // BLACK colour
-        ellipse(circle.getXPos(), circle.getYPos(), 100, 100);
-      }
+    if(circles.isEmpty()) return;
+
+    for(Circle circle : circles.keySet()) {
+      fill(CIRCLE_COLOUR);
+      ellipse(circle.getXPos(), circle.getYPos(), 100, 100);
     }
   }
 
@@ -45,43 +64,19 @@ class Patroller extends Triangule {
       circles.put(circle, 1);
   }
 
-  private void moveForwards() {
-    if(isVertical)
-      setTrianguleHeight(getTrianguleHeight() + getSpeed());
-    else
-      setTrianguleWidth(getTrianguleWidth() + getSpeed());
+  private void setShorterHorientation() {
+    setHorientation(isVerticalShorter() ? VERTICAL : HORIZONTAL);
   }
 
-  private void moveBackwards() {
-    if(isVertical)
-      setTrianguleHeight(getTrianguleHeight() - getSpeed());
-    else
-      setTrianguleWidth(getTrianguleWidth() - getSpeed());
+  private void setShorterDirection() {
+    setDirection(isForwarsShorter() ? FORWARDS : BACKWARDS);
   }
 
-  public void checkIfHasReached() {
-    if(isVertical)
-      checkVerticalReached();
-    else
-      checkHorizontalReached();
+  private boolean isVerticalShorter() {
+    return (width - getTrianguleWidth()) < getTrianguleWidth();
   }
 
-  private void checkVerticalReached() {
-    if((isForwards && hasReachedMaxHeight()) || (!isForwards && hasReachedMinHeight())) {
-      isVertical = false;
-      addCircle();
-    }
-  }
-
-  private void checkHorizontalReached() {
-    if(isForwards && hasReachedMaxWidth()) {
-      isForwards  = false;
-      isVertical = true;
-      addCircle();
-    } else if(!isForwards && hasReachedMinWidth()) {
-      isForwards  = true;
-      isVertical = true;
-      addCircle();
-    }
+  private boolean isForwarsShorter() {
+    return (height - getTrianguleHeight()) < getTrianguleHeight();
   }
 }
