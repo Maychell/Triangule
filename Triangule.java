@@ -56,33 +56,33 @@ public abstract class Triangule {
   
   protected boolean hasReachedMaxHeight() {
     if(isForwards()) {
-      return yPos1 >= height;
+      return yPos1 + speed >= height;
     } else {
-      return yPos2 >= height;
+      return yPos2 + speed >= height;
     }
   }
 
   protected boolean hasReachedMaxWidth() {
     if(isForwards()) {
-      return xPos1 >= width;
+      return xPos1 + speed >= width;
     } else {
-      return xPos2 >= width;
+      return xPos2 + speed >= width;
     }
   }
 
   protected boolean hasReachedMinHeight() {
     if(isForwards()) {
-      return yPos1 <= 0;
+      return yPos1 - speed - distanceEdgeToCentre() <= 0;
     } else {
-      return yPos2 <= 0;
+      return yPos2 - speed - distanceEdgeToCentre() <= 0;
     }
   }
 
   protected boolean hasReachedMinWidth() {
     if(isForwards()) {
-      return xPos1 <= 0;
+      return xPos1 - speed - distanceEdgeToCentre() <= 0;
     } else {
-      return xPos2 <= 0;
+      return xPos2 - speed - distanceEdgeToCentre() <= 0;
     }
   }
 
@@ -193,9 +193,9 @@ public abstract class Triangule {
 
   protected boolean isForwards() { return direction == FORWARDS; }
 
-  private boolean isLeft() { return directionSide == LEFT_SIDE; }
+  protected boolean isLeft() { return directionSide == LEFT_SIDE; }
 
-  private boolean isUp() { return directionSide == UP_SIDE; }
+  protected boolean isUp() { return directionSide == UP_SIDE; }
 
   // ACESSORS
   public int getHorientation() { return horientation; }

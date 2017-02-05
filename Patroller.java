@@ -31,7 +31,6 @@ class Patroller extends Triangule {
 
   private void checkVerticalReached() {
     if((isForwards() && hasReachedMaxHeight())) {
-      // setHorientation(HORIZONTAL);
       turnRight();
       addCircle();
     }
@@ -44,12 +43,10 @@ class Patroller extends Triangule {
   private void checkHorizontalReached() {
     if(isForwards() && hasReachedMaxWidth()) {
       setDirection(BACKWARDS);
-      // setHorientation(VERTICAL);
       turnRight();
       addCircle();
     } else if(!isForwards() && hasReachedMinWidth()) {
       setDirection(FORWARDS);
-      // setHorientation(VERTICAL);
       turnLeft();
       addCircle();
     }
