@@ -185,9 +185,9 @@ public abstract class Triangule {
     horientation = VERTICAL;
   }
 
-  private int getXCentre() { return (xPos1 + xPos2 + xPos3)/3; }
+  protected int getXCentre() { return (xPos1 + xPos2 + xPos3)/3; }
 
-  private int getYCentre() { return (yPos1 + yPos2 + yPos3)/3; }
+  protected int getYCentre() { return (yPos1 + yPos2 + yPos3)/3; }
 
   protected boolean isVertical() { return horientation == VERTICAL; }
 
@@ -198,6 +198,8 @@ public abstract class Triangule {
   protected boolean isUp() { return directionSide == UP_SIDE; }
 
   // ACESSORS
+  public int getXPos1() { return xPos1; }
+  
   public int getHorientation() { return horientation; }
 
   public void setHorientation(int horientation) { this.horientation = horientation; }

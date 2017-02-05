@@ -1,14 +1,15 @@
 class Patroller extends Triangule {
   private final int CIRCLE_COLOUR = 0;
   private HashMap<Circle, Integer> circles;
+  private boolean firstSpot = true;
   
   public Patroller(int width, int height, int colour, int speed) {
     super(width, height, colour, speed);
 
     circles = new HashMap<Circle, Integer>();
 
-    setShorterHorientation();
-    setShorterDirection();
+    setHorientation(VERTICAL);
+    setDirection(FORWARDS);
   }
 
   public void move() {
@@ -31,24 +32,24 @@ class Patroller extends Triangule {
 
   private void checkVerticalReached() {
     if((isForwards() && hasReachedMaxHeight())) {
-      turnRight();
       addCircle();
+      turnRight();
     }
     if(!isForwards() && hasReachedMinHeight()) {
-      turnLeft();
       addCircle();
+      turnLeft();
     }
   }
 
   private void checkHorizontalReached() {
     if(isForwards() && hasReachedMaxWidth()) {
+      addCircle();
       setDirection(BACKWARDS);
       turnRight();
-      addCircle();
     } else if(!isForwards() && hasReachedMinWidth()) {
+      addCircle();
       setDirection(FORWARDS);
       turnLeft();
-      addCircle();
     }
   }
 
@@ -57,57 +58,19 @@ class Patroller extends Triangule {
 
     for(Circle circle : circles.keySet()) {
       fill(CIRCLE_COLOUR);
-      ellipse(circle.getXPos(), circle.getYPos(), 100, 100);
+      ellipse(circle.getXPos(), circle.getYPos(), distanceEdgeToCentre(), distanceEdgeToCentre());
     }
   }
 
   private void addCircle() {
-    int xPosition = -1;
-    int yPosition = -1;
-
-    if(hasReachedMaxWidth()) {
-      xPosition = width;
-      yPosition = getYPosition();
+    if(firstSpot) {
+      firstSpot = false;
+      return;
     }
 
-    if(hasReachedMinWidth()) {
-      xPosition = 0;
-      yPosition = getYPosition();
-    }
+    Circle circle = new Circle(getXCentre(), getYCentre());
 
-    if(xPosition == -1 || yPosition == -1) return;
-
-    Circle circle = new Circle(xPosition, yPosition);
-
-    if(!circles.containsKey(circle))
+    if(circles.size() < 4)
       circles.put(circle, 1);
-  }
-
-  private int getYPosition() {
-    if(hasReachedMinHeight())
-      return 0;
-    else if(hasReachedMaxHeight())
-      return height;
-    return -1;
-  }
-
-  private void setShorterHorientation() {
-    setHorientation(isVerticalShorter() ? VERTICAL : HORIZONTAL);
-  }
-
-  private void setShorterDirection() {
-    setDirection(isForwarsShorter() ? FORWARDS : BACKWARDS);
-  }
-
-  private boolean isVerticalShorter() {
-    return true;
-
-    // return (width - getTrianguleWidth()) < getTrianguleWidth();
-  }
-
-  private boolean isForwarsShorter() {
-    return true;
-
-    // return (height - getTrianguleHeight()) < getTrianguleHeight();
   }
 }
