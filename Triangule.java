@@ -3,16 +3,20 @@ public abstract class Triangule {
   protected final int BACKWARDS  = 2;
   protected final int VERTICAL   = 1;
   protected final int HORIZONTAL = 2;
+  protected final int LEFT_SIDE  = 1;
+  protected final int RIGHT_SIDE = 2;
+  protected final int DOWN_SIDE  = 3;
+  protected final int UP_SIDE    = 4;
 
   private int tWidth;
   private int tHeight;
 
-  // private int trianguleHeight;
   private int colour;
   private int speed;
 
   private int horientation;
   private int direction;
+  private int directionSide;
 
   private int xSource = width/2;
   private int ySource = height/2;
@@ -25,7 +29,6 @@ public abstract class Triangule {
   private int yPos3;
   
   public Triangule(int tWidth, int tHeight, int colour, int speed) {
-    // this.trianguleHeight = tHeight;
     this.colour = colour;
     this.speed  = speed;
 
@@ -44,7 +47,6 @@ public abstract class Triangule {
 
   public void display() {
     fill(colour);
-    // triangle(trianguleWidth/2, trianguleHeight/2 - 10, trianguleWidth/2 - 10, trianguleHeight/2 + 10, trianguleWidth/2 + 10, trianguleHeight/2 + 10);
     triangle(xPos1, yPos1, xPos2, yPos2, xPos3, yPos3);
   }
 
@@ -58,8 +60,6 @@ public abstract class Triangule {
     } else {
       return yPos2 >= height;
     }
-
-    // return trianguleHeight >= height;
   }
 
   protected boolean hasReachedMaxWidth() {
@@ -68,8 +68,6 @@ public abstract class Triangule {
     } else {
       return xPos2 >= width;
     }
-
-    // return trianguleWidth >= width;
   }
 
   protected boolean hasReachedMinHeight() {
@@ -78,8 +76,6 @@ public abstract class Triangule {
     } else {
       return yPos2 <= 0;
     }
-
-    // return trianguleHeight <= 0;
   }
 
   protected boolean hasReachedMinWidth() {
@@ -88,13 +84,7 @@ public abstract class Triangule {
     } else {
       return xPos2 <= 0;
     }
-
-    // return trianguleWidth <= 0;
   }
-
-  protected boolean isVertical() { return horientation == VERTICAL; }
-
-  protected boolean isForwards() { return direction == FORWARDS; }
 
   protected void moveForwards() {
     if(isVertical()) {
@@ -120,12 +110,32 @@ public abstract class Triangule {
     }
   }
 
-  // TODO
-  public int distanceEdgeToCentre() { return 1; }
+  public int distanceEdgeToCentre() {
+    int xCentre = getXCentre();
+    int yCentre = getYCentre();
 
-  private int getXCentre() { return (xPos1 + xPos2 + xPos3)/3; }
+    int l = 0;
 
-  private int getYCentre() { return (yPos1 + yPos2 + yPos3)/3; }
+    if(isVertical()) {
+      if((yCentre - yPos1) > 0) {
+        l = yCentre - yPos1;
+        directionSide = LEFT_SIDE;
+      } else {
+        l = yPos1 - yCentre;
+        directionSide = RIGHT_SIDE;
+      }
+    } else {
+      if((xCentre - xPos1) > 0) {
+        l = xCentre - xPos1;
+        directionSide = DOWN_SIDE;
+      } else {
+        l = xPos1 - xCentre;
+        directionSide = UP_SIDE;
+      }
+    }
+
+    return l;
+  }
 
   protected void turnLeft() {
     if(isVertical())
@@ -144,25 +154,15 @@ public abstract class Triangule {
   private void whenVertical() {
     int xCentre = getXCentre();
     int yCentre = getYCentre();
+    int l = distanceEdgeToCentre();
 
-    int l;
-    boolean goLeft;
-
-    if((yCentre - yPos1) > 0) {
-      l = yCentre - yPos1;
-      goLeft = true;
-    } else {
-      l = yPos1 - yCentre;
-      goLeft = false;
-    }
-
-    xPos1 = goLeft ? (xCentre - l) : (xCentre + l);
+    xPos1 = isLeft() ? (xCentre - l) : (xCentre + l);
     yPos1 = yCentre;
 
-    xPos2 = goLeft ? (xPos1 + tHeight) : (xPos1 - tHeight);
+    xPos2 = isLeft() ? (xPos1 + tHeight) : (xPos1 - tHeight);
     yPos2 = yPos1 + tWidth/2;
 
-    xPos3 = goLeft ? (xPos1 + tHeight) : (xPos1 - tHeight);
+    xPos3 = xPos2;
     yPos3 = yPos1 - tWidth/2;
 
     horientation = HORIZONTAL;
@@ -171,29 +171,31 @@ public abstract class Triangule {
   private void whenHorizontal() {
     int xCentre = getXCentre();
     int yCentre = getYCentre();
-
-    int l;
-    boolean goUp = false;
-
-    if((xCentre - xPos1) > 0) {
-      l = xCentre - xPos1;
-      goUp = false;
-    } else {
-      l = xPos1 - xCentre;
-      goUp = true;
-    }
+    int l = distanceEdgeToCentre();
 
     xPos1 = xCentre;
-    yPos1 = goUp ? (yCentre - l) : (yCentre + l);
+    yPos1 = isUp() ? (yCentre - l) : (yCentre + l);
 
     xPos2 = xPos1 + tWidth/2;
-    yPos2 = goUp ? (yPos1 + tHeight) : (yPos1 - tHeight);
+    yPos2 = isUp() ? (yPos1 + tHeight) : (yPos1 - tHeight);
 
     xPos3 = xPos1 - tWidth/2;
-    yPos3 = goUp ? (yPos1 + tHeight) : (yPos1 - tHeight);
+    yPos3 = yPos2;
 
     horientation = VERTICAL;
   }
+
+  private int getXCentre() { return (xPos1 + xPos2 + xPos3)/3; }
+
+  private int getYCentre() { return (yPos1 + yPos2 + yPos3)/3; }
+
+  protected boolean isVertical() { return horientation == VERTICAL; }
+
+  protected boolean isForwards() { return direction == FORWARDS; }
+
+  private boolean isLeft() { return directionSide == LEFT_SIDE; }
+
+  private boolean isUp() { return directionSide == UP_SIDE; }
 
   // ACESSORS
   public int getHorientation() { return horientation; }
@@ -205,8 +207,4 @@ public abstract class Triangule {
   public void setDirection(int direction) { this.direction = direction; }
 
   public int getSpeed() { return speed; }
-
-  // public int getTrianguleHeight() { return trianguleHeight; }
-
-  // public void setTrianguleHeight(int trianguleHeight) { this.trianguleHeight = trianguleHeight; }
 }
