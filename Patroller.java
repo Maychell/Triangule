@@ -58,10 +58,33 @@ class Patroller extends Triangule {
   }
 
   private void addCircle() {
-    Circle circle = new Circle(getTrianguleWidth(), getTrianguleHeight());
+    int xPosition = -1;
+    int yPosition = -1;
+
+    if(hasReachedMaxWidth()) {
+      xPosition = width;
+      yPosition = getYPosition();
+    }
+
+    if(hasReachedMinWidth()) {
+      xPosition = 0;
+      yPosition = getYPosition();
+    }
+
+    if(xPosition == -1 || yPosition == -1) return;
+
+    Circle circle = new Circle(xPosition, yPosition);
 
     if(!circles.containsKey(circle))
       circles.put(circle, 1);
+  }
+
+  private int getYPosition() {
+    if(hasReachedMinHeight())
+      return 0;
+    else if(hasReachedMaxHeight())
+      return height;
+    return -1;
   }
 
   private void setShorterHorientation() {
