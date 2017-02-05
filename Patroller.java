@@ -30,8 +30,13 @@ class Patroller extends Triangule {
   }
 
   private void checkVerticalReached() {
-    if((isForwards() && hasReachedMaxHeight()) || (!isForwards() && hasReachedMinHeight())) {
-      setHorientation(HORIZONTAL);
+    if((isForwards() && hasReachedMaxHeight())) {
+      // setHorientation(HORIZONTAL);
+      turnRight();
+      addCircle();
+    }
+    if(!isForwards() && hasReachedMinHeight()) {
+      turnLeft();
       addCircle();
     }
   }
@@ -39,11 +44,13 @@ class Patroller extends Triangule {
   private void checkHorizontalReached() {
     if(isForwards() && hasReachedMaxWidth()) {
       setDirection(BACKWARDS);
-      setHorientation(VERTICAL);
+      // setHorientation(VERTICAL);
+      turnRight();
       addCircle();
     } else if(!isForwards() && hasReachedMinWidth()) {
       setDirection(FORWARDS);
-      setHorientation(VERTICAL);
+      // setHorientation(VERTICAL);
+      turnLeft();
       addCircle();
     }
   }
@@ -96,10 +103,14 @@ class Patroller extends Triangule {
   }
 
   private boolean isVerticalShorter() {
-    return (width - getTrianguleWidth()) < getTrianguleWidth();
+    return true;
+
+    // return (width - getTrianguleWidth()) < getTrianguleWidth();
   }
 
   private boolean isForwarsShorter() {
-    return (height - getTrianguleHeight()) < getTrianguleHeight();
+    return true;
+
+    // return (height - getTrianguleHeight()) < getTrianguleHeight();
   }
 }
