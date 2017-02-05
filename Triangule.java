@@ -127,62 +127,70 @@ public abstract class Triangule {
 
   private int getYCentre() { return (yPos1 + yPos2 + yPos3)/3; }
 
-  public void turnLeft() {
+  protected void turnLeft() {
     if(isVertical())
-      whenVertical(false);
+      whenVertical();
     else
-      whenHorizontal(false);
+      whenHorizontal();
   }
 
   protected void turnRight() {
     if(isVertical())
-      whenVertical(true);
+      whenVertical();
     else
-      whenHorizontal(true);
+      whenHorizontal();
   }
 
-  private void whenVertical(boolean isRight) {
+  private void whenVertical() {
     int xCentre = getXCentre();
     int yCentre = getYCentre();
 
     int l;
-    if((xCentre - xPos1) > 0) {
-      l = xCentre - xPos1;
+    boolean goLeft;
+
+    if((yCentre - yPos1) > 0) {
+      l = yCentre - yPos1;
+      goLeft = true;
     } else {
-      l = xPos1 - xCentre;
+      l = yPos1 - yCentre;
+      goLeft = false;
     }
 
-    xPos1 = isRight ? (xCentre + l) : (xCentre - l);
+    xPos1 = goLeft ? (xCentre - l) : (xCentre + l);
     yPos1 = yCentre;
 
-    xPos2 = xPos1 - tHeight;
+    xPos2 = goLeft ? (xPos1 + tHeight) : (xPos1 - tHeight);
     yPos2 = yPos1 + tWidth/2;
 
-    xPos3 = xPos1 - tHeight;
+    xPos3 = goLeft ? (xPos1 + tHeight) : (xPos1 - tHeight);
     yPos3 = yPos1 - tWidth/2;
 
     horientation = HORIZONTAL;
   }
 
-  private void whenHorizontal(boolean isRight) {
+  private void whenHorizontal() {
     int xCentre = getXCentre();
     int yCentre = getYCentre();
 
     int l;
-    if((yCentre - yPos1) > 0) {
-      l = yCentre - yPos1;
+    boolean goUp = false;
+
+    if((xCentre - xPos1) > 0) {
+      l = xCentre - xPos1;
+      goUp = false;
     } else {
-      l = yPos1 - yCentre;
+      l = xPos1 - xCentre;
+      goUp = true;
     }
 
     xPos1 = xCentre;
-    yPos1 = isRight ? (yCentre + l) : (yCentre - l);
+    yPos1 = goUp ? (yCentre - l) : (yCentre + l);
 
     xPos2 = xPos1 + tWidth/2;
-    yPos2 = yPos1 - tHeight;
+    yPos2 = goUp ? (yPos1 + tHeight) : (yPos1 - tHeight);
 
     xPos3 = xPos1 - tWidth/2;
-    yPos3 = yPos1 - tHeight;
+    yPos3 = goUp ? (yPos1 + tHeight) : (yPos1 - tHeight);
 
     horientation = VERTICAL;
   }
