@@ -25,9 +25,11 @@ class Patroller extends Triangule {
       moveForwards();
     else
       moveBackwards();
+
+    drawCircle();
   }
 
-  public void drawCircle() {
+  private void drawCircle() {
     if(!circles.isEmpty()) {
       for(Circle circle : circles.keySet()) {
         fill(0); // BLACK colour

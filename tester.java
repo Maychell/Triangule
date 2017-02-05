@@ -1,18 +1,22 @@
 private final int ALICE_COLOUR = 200;
 private final int ALICE_SPEED  = 15;
+private final int BOB_COLOUR   = 10;
+private final int BOB_SPEED    = 5;
 
-private Patroller alice;
+private Triangule alice, bob;
 
 void setup() {
   size(1000, 500);
   background(255);
   alice = new Patroller(20, 30, ALICE_COLOUR, ALICE_SPEED);
+  bob   = new RandomWalk(20, 30, BOB_COLOUR, BOB_SPEED);
 }
 
 void draw() {
   background(255);
-  alice.checkIfHasReached();
-  alice.drawCircle();
+  bob.move();
+  bob.display();
+
   alice.move();
   alice.display();
 }
